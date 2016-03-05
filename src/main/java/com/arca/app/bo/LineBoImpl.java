@@ -1,6 +1,7 @@
 package com.arca.app.bo;
 
 import com.arca.app.dao.LineDaoImpl;
+import com.arca.app.domain.GroupedLine;
 import com.arca.app.domain.Line;
 import org.jvnet.hk2.annotations.Service;
 
@@ -14,12 +15,11 @@ public class LineBoImpl implements LineBo {
 
     private LineDaoImpl lineDao;
 
-
-    public List<Line> getAll() {
-        return lineDao.getAll();
+    public LineBoImpl () {
+        this.lineDao = new LineDaoImpl();
     }
 
-    public List<Line> getByCountry() {
+    public List<GroupedLine> getByCountry() {
         return lineDao.getByCountry();
     }
 }

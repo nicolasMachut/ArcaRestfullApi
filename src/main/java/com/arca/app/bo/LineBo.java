@@ -1,6 +1,6 @@
 package com.arca.app.bo;
 
-import com.arca.app.domain.Line;
+import com.arca.app.domain.GroupedLine;
 
 import java.util.List;
 
@@ -9,6 +9,5 @@ import java.util.List;
  */
 public interface LineBo {
 
-    List<Line> getAll();
-    List<Line> getByCountry ();
+    List<GroupedLine> getByCountry ();
 }

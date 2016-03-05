@@ -1,33 +1,38 @@
 package com.arca.app.dao;
 
-import com.arca.app.domain.Line;
-import org.jvnet.hk2.annotations.Service;
+import com.arca.app.MongoDbConnector;
+import com.arca.app.domain.GroupedLine;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.Block;
+import com.mongodb.client.AggregateIterable;
+import org.bson.Document;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by machu on 05/03/2016.
  */
-@Service (name = "lineDaoImpl")
 public class LineDaoImpl implements LineDao {
 
-
-    public List<Line> getAll() {
-        return null;
-    }
-
-    public List<Line> getByCountry() {
-        /*Aggregation aggregation = newAggregation(group("country").sum("value").as("test"));
-        AggregationResults results = mongoOperations.aggregate(aggregation, "arcaFile", LineGroup.class);
-        Iterator it = results.iterator();
-        while (it.hasNext()) {
-            LineGroup lg = (LineGroup)it.next();
-            System.out.println(lg.get_id());
-        }
-        List<LineGroup> res = results.getMappedResults();
-        for (LineGroup l : res) {
-            System.out.println(l.get_id() + " " + l.getTest());
-        }*/
-        return null;
+    public List<GroupedLine> getByCountry() {
+        final ObjectMapper mapper = new ObjectMapper();
+        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.INSTANCE.getCollection("arcaFile").aggregate(Arrays.asList(new Document("$group", new Document("_id", "$country").append("sum", new Document("$sum", "$value")))));
+        final ArrayList<GroupedLine> lines = new ArrayList<GroupedLine>();
+        documentsReturnedByMongo.forEach(new Block<Document>() {
+            public void apply(Document document) {
+                GroupedLine line = null;
+                try {
+                    System.out.println(document.toJson());
+                    line = mapper.readValue(document.toJson(), GroupedLine.class);
+                    lines.add(line);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return lines;
     }
 }

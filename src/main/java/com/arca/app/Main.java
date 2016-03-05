@@ -27,6 +27,8 @@ public class Main {
 
         jettyServer.setHandler(root);
 
+
+
         try {
             jettyServer.start();
             jettyServer.join();
