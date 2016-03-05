@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,7 +26,6 @@ public class LineResource {
         this.lineBo = new LineBoImpl();
     }
 
-
     @GET
     @Path("lineByCountry")
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,8 +34,15 @@ public class LineResource {
         final ObjectMapper mapper = new ObjectMapper();
         List<GroupedLine> res = lineBo.getByCountry();
         String json = mapper.writeValueAsString(res);
-        return Response.ok(json).header("Access-Control-Allow-Origin","*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
+        return Response.ok(json).build();
 
+    }
+
+    @GET
+    @Path("chart")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getChart (@PathParam("year") int year) {
+        System.out.println("year : " + year);
+        return Response.ok().build();
     }
 }
