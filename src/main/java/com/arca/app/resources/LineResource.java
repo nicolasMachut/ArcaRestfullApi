@@ -6,10 +6,7 @@ import com.arca.app.domain.GroupedLine;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -41,7 +38,7 @@ public class LineResource {
     @GET
     @Path("chart")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getChart (@PathParam("year") int year) {
+    public Response getChart (@FormParam("year") int year) {
         System.out.println("year : " + year);
         return Response.ok().build();
     }
