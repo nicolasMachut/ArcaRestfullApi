@@ -1,1 +1,1 @@
-web: java -jar target/ArcaRestfullApi-1.0-SNAPSHOT.jar
+web: java -jar target/ArcaRestfullApi-1.0-SNAPSHOT.jar --port 8080

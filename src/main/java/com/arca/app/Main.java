@@ -22,10 +22,6 @@ public class Main {
         Server jettyServer = new Server(8080);
         jettyServer.setHandler(context);
 
-        Map<String,Object> initMap = new HashMap<String, Object>();
-        initMap.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
-        initMap.put("com.sun.jersey.config.property.packages", "my.package.with.resources");
-
         ServletHolder jerseyServlet = context.addServlet(
                 org.glassfish.jersey.servlet.ServletContainer.class, "/*");
         jerseyServlet.setInitOrder(0);
