@@ -16,10 +16,15 @@ import java.util.Map;
 public class Main {
 
     public static void main (String[] args) {
+        String port = System.getenv("PORT");
+        if (port == null || port.isEmpty()) {
+            port = "8080";
+        }
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
 
-        Server jettyServer = new Server(8080);
+        Server jettyServer = new Server(Integer.valueOf(port));
         jettyServer.setHandler(context);
 
         ServletHolder jerseyServlet = context.addServlet(
