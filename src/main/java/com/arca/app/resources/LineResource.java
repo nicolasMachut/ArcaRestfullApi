@@ -25,7 +25,7 @@ public class LineResource {
         this.lineBo = new LineBoImpl();
     }
 
-    
+
     @GET
     @Path("lineByCountry")
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,7 +34,8 @@ public class LineResource {
         final ObjectMapper mapper = new ObjectMapper();
         List<GroupedLine> res = lineBo.getByCountry();
         String json = mapper.writeValueAsString(res);
-        return Response.ok(json).build();
+        return Response.ok(json).header("Access-Control-Allow-Origin","*")
+                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
 
     }
 }
