@@ -1,20 +1,20 @@
 package com.arca.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.Document;
 
 /**
  * Created by machu on 03/03/2016.
  */
+
+@JsonAutoDetect(fieldVisibility= JsonAutoDetect.Visibility.NONE)
 public class Line {
 
-    @JsonProperty("timestamp")
+    @JsonProperty
     private String timestamp;
 
-    @JsonProperty("value")
     private String value;
 
-    @JsonProperty("country")
     private String country;
 
     public String getTimestamp() {
@@ -27,5 +27,10 @@ public class Line {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String toString () {
+        return "timestamp : " + timestamp + ", value : " + value + ", country : " + country;
     }
 }

@@ -9,6 +9,7 @@ import org.bson.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,11 +25,19 @@ public class LineDao {
         while (cursor.hasNext()) {
             Document obj = (Document) cursor.next();
             try {
-                lines.add(mapper.readValue(obj.toJson(), Line.class));
+                Line line = mapper.readValue(obj.toJson(), Line.class);
+                lines.add(line);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return lines;
+    }
+
+    public List<Line> getGroupPays () {
+        List<Line> lines = new ArrayList<Line>();
+        ArrayList<Document> docs = new ArrayList<Document>();
+        MongoDbConnector.INSTANCE.getCollection("arcaFile").aggregate(Arrays.asList(new Document("$group", new Document())));
+        return null;
     }
 }
