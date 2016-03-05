@@ -19,7 +19,7 @@ public class LineDao {
 
     public List<Line> getAll (){
         List<Line> lines = new ArrayList<Line>();
-        MongoCursor cursor = MongoDbConnector.INSTANCE.getCollection("arcaFile").find(new Document()).iterator();
+        MongoCursor cursor = MongoDbConnector.INSTANCE.getCollection("arcaFile").find(new Document("$group", "country")).iterator();
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         while (cursor.hasNext()) {
@@ -37,7 +37,8 @@ public class LineDao {
     public List<Line> getGroupPays () {
         List<Line> lines = new ArrayList<Line>();
         ArrayList<Document> docs = new ArrayList<Document>();
-        MongoDbConnector.INSTANCE.getCollection("arcaFile").aggregate(Arrays.asList(new Document("$group", new Document())));
+        Document match = new Document();
+        MongoDbConnector.INSTANCE.getCollection("arcaFile").find(new Document("$group", "country"));
         return null;
     }
 }

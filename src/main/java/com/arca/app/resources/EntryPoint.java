@@ -29,7 +29,6 @@ public class EntryPoint {
     @Path("test")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test () {
-        System.out.println("hrllo");
         List<Line> lines = lineDao.getAll();
         String json = null;
         try {
@@ -41,7 +40,6 @@ public class EntryPoint {
                 ok(json)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "*")
-                .allow("OPTIONS")
                 .build();
     }
 }
