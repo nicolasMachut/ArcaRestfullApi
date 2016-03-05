@@ -28,6 +28,7 @@ public class EntryPoint {
         this.lineDao = new LineDao();
     }
 
+
     @GET
     @Path("test")
     @Produces(MediaType.APPLICATION_JSON)
