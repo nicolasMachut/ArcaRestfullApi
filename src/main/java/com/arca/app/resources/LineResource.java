@@ -25,6 +25,7 @@ public class LineResource {
         this.lineBo = new LineBoImpl();
     }
 
+    
     @GET
     @Path("lineByCountry")
     @Produces(MediaType.APPLICATION_JSON)
