@@ -36,7 +36,7 @@ public class LineDaoImpl implements LineDao {
                 }
             }
         });
-        
+
         return lines;
     }
 
