@@ -2,6 +2,7 @@ package com.arca.app.resources;
 
 import com.arca.app.bo.LineBo;
 import com.arca.app.bo.LineBoImpl;
+import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -36,10 +38,12 @@ public class LineResource {
     }
 
     @GET
-    @Path("chart")
+    @Path("chart/{year}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getChart (@FormParam("year") int year) {
-        System.out.println("year : " + year);
-        return Response.ok().build();
+    public Response getChart (@PathParam("year") int year) throws JsonProcessingException {
+        final ObjectMapper mapper = new ObjectMapper();
+        List<ChartLine> res = lineBo.getForChart(year);
+        String json = mapper.writeValueAsString(res);
+        return Response.ok(json).build();
     }
 }

@@ -1,8 +1,8 @@
 package com.arca.app.bo;
 
 import com.arca.app.dao.LineDaoImpl;
+import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
-import com.arca.app.domain.Line;
 import org.jvnet.hk2.annotations.Service;
 
 import java.util.List;
@@ -21,5 +21,9 @@ public class LineBoImpl implements LineBo {
 
     public List<GroupedLine> getByCountry() {
         return lineDao.getByCountry();
+    }
+
+    public List<ChartLine> getForChart(int year) {
+        return lineDao.getForChart(year);
     }
 }

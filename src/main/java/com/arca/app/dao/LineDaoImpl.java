@@ -1,6 +1,7 @@
 package com.arca.app.dao;
 
 import com.arca.app.MongoDbConnector;
+import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.Block;
@@ -23,10 +24,30 @@ public class LineDaoImpl implements LineDao {
         final ArrayList<GroupedLine> lines = new ArrayList<GroupedLine>();
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
-                GroupedLine line = null;
+
                 try {
-                    System.out.println(document.toJson());
-                    line = mapper.readValue(document.toJson(), GroupedLine.class);
+                    GroupedLine line = mapper.readValue(document.toJson(), GroupedLine.class);
+                    lines.add(line);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return lines;
+    }
+
+    public List<ChartLine> getForChart(int year) {
+        final ObjectMapper mapper = new ObjectMapper();
+        final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
+        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
+                INSTANCE
+                .getCollection("arcaFile")
+                .aggregate(Arrays.asList(new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value")))));
+        documentsReturnedByMongo.forEach(new Block<Document>() {
+            public void apply(Document document) {
+
+                try {
+                    ChartLine line = mapper.readValue(document.toJson(), ChartLine.class);
                     lines.add(line);
                 } catch (IOException e) {
                     e.printStackTrace();

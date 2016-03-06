@@ -1,5 +1,6 @@
 package com.arca.app.bo;
 
+import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
 
 import java.util.List;
@@ -10,4 +11,6 @@ import java.util.List;
 public interface LineBo {
 
     List<GroupedLine> getByCountry ();
+
+    List<ChartLine> getForChart(int year);
 }
