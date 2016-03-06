@@ -19,8 +19,10 @@ import java.util.List;
  */
 public class LineDaoImpl implements LineDao {
 
+    // Static objects should be avoided but it's fine for the mapper :)
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public List<GroupedLine> getByCountry() {
-        final ObjectMapper mapper = new ObjectMapper();
         AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.INSTANCE.getCollection("arcaFile").aggregate(Arrays.asList(new Document("$group", new Document("_id", "$country").append("sum", new Document("$sum", "$value")))));
         final ArrayList<GroupedLine> lines = new ArrayList<GroupedLine>();
         documentsReturnedByMongo.forEach(new Block<Document>() {
@@ -38,12 +40,16 @@ public class LineDaoImpl implements LineDao {
     }
 
     public List<ChartLine> getForChart(Date start, Date end) {
-        final ObjectMapper mapper = new ObjectMapper();
-        final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
         AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
                 INSTANCE
                 .getCollection("arcaFile")
                 .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start.getTime()).append("$lte", end.getTime()))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
+
+        return addToList(documentsReturnedByMongo);
+    }
+
+    private ArrayList<ChartLine> addToList(AggregateIterable<Document> documentsReturnedByMongo) {
+        final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
 
