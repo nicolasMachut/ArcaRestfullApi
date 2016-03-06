@@ -11,6 +11,7 @@ import org.bson.Document;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,13 +37,13 @@ public class LineDaoImpl implements LineDao {
         return lines;
     }
 
-    public List<ChartLine> getForChart(int year) {
+    public List<ChartLine> getForChart(Date start, Date end) {
         final ObjectMapper mapper = new ObjectMapper();
         final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
         AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
                 INSTANCE
                 .getCollection("arcaFile")
-                .aggregate(Arrays.asList(new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
+                .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start.getTime()).append("$lte", end.getTime()))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
 

@@ -3,6 +3,7 @@ package com.arca.app.dao;
 import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,5 +12,5 @@ import java.util.List;
 public interface LineDao {
 
     List<GroupedLine> getByCountry ();
-    List<ChartLine> getForChart (int year);
+    List<ChartLine> getForChart (Date start, Date end);
 }

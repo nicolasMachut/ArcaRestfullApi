@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 /**
  * Created by nicolas on 27/02/16.
@@ -34,7 +35,7 @@ public class MongoDbConnector {
         database = mongoClient.getDatabase(uri.getDatabase());
     }
 
-    public MongoCollection getCollection (String collectionName) {
+    public MongoCollection<Document> getCollection (String collectionName) {
         return database.getCollection(collectionName);
     }
 }
