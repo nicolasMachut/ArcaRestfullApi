@@ -42,7 +42,7 @@ public class LineDaoImpl implements LineDao {
         AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
                 INSTANCE
                 .getCollection("arcaFile")
-                .aggregate(Arrays.asList(new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value")))));
+                .aggregate(Arrays.asList(new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
 
