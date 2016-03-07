@@ -12,7 +12,7 @@ public class Main {
 
         String port = System.getenv("PORT");
         if (port == null || port.isEmpty()) {
-            port = "8080";
+            port = "8082";
         }
 
         Server jettyServer = new Server(Integer.valueOf(port));
@@ -27,10 +27,9 @@ public class Main {
 
         jettyServer.setHandler(root);
 
-
-
         try {
             jettyServer.start();
+            MongoDbConnector.INSTANCE.getCollection("arcaFile");
             jettyServer.join();
         } catch (InterruptedException e) {
             e.printStackTrace();

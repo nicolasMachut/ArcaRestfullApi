@@ -20,13 +20,16 @@ public class MongoDbConnector {
 
         // Connection properties
         String databaseName = "arcadb";
-        String host = "ds017248.mlab.com";
+        //String host = "ds017248.mlab.com";
+        String host = "localhost";
         String user = "arcaBatch";
         String password = "arca";
-        int port = 17248;
+        //int port = 17248;
+        int port = 27017;
 
         // Creating mongodb uri connection
-        MongoClientURI uri = new MongoClientURI("mongodb://" + user + ":" + password + "@" + host + ":" + port + "/" + databaseName);
+        //MongoClientURI uri = new MongoClientURI("mongodb://" + user + ":" + password + "@" + host + ":" + port + "/" + databaseName);
+        MongoClientURI uri = new MongoClientURI("mongodb://" + host + ":" + port + "/" + databaseName);
 
         // Creating mongodb connection
         MongoClient mongoClient = new MongoClient(uri);
