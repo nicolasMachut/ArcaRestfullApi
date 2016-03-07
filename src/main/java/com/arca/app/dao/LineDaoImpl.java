@@ -44,7 +44,7 @@ public class LineDaoImpl implements LineDao {
         AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
                 INSTANCE
                 .getCollection("arcaFile")
-                .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start.getTime()).append("$lte", end.getTime()))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
+                .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start).append("$lte", end))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
 
         return addToList(documentsReturnedByMongo);
     }
@@ -53,15 +53,17 @@ public class LineDaoImpl implements LineDao {
         final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
-
+                System.out.println("test");
                 try {
                     ChartLine line = mapper.readValue(document.toJson(), ChartLine.class);
+                    System.out.println(line.getSum());
                     lines.add(line);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+        System.out.println(lines.size());
         return lines;
     }
 }
