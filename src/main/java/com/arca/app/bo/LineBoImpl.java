@@ -23,15 +23,17 @@ public class LineBoImpl implements LineBo {
         return lineDao.getForChart(getFirstDayOfTheYear(year), getLastDayOfTheYear(year));
     }
 
-    private Date getFirstDayOfTheYear (int year) {
+    public Date getFirstDayOfTheYear (int year) {
         Calendar start = Calendar.getInstance();
         start.set(year,0,1,0,0,0);
+        start.set(Calendar.MILLISECOND, 0);
         return start.getTime();
     }
 
-    private Date getLastDayOfTheYear (int year) {
+    public Date getLastDayOfTheYear (int year) {
         Calendar end = Calendar.getInstance();
         end.set(year, 11, 31, 23, 59, 59);
+        end.set(Calendar.MILLISECOND, 999);
         return end.getTime();
     }
 }
