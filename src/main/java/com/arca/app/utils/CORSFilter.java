@@ -1,4 +1,4 @@
-package com.arca.app;
+package com.arca.app.utils;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

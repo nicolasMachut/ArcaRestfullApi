@@ -1,5 +1,7 @@
 package com.arca.app.resources;
 
+import com.arca.app.server.JettyServer;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,8 +20,9 @@ public class BatchResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response newBatch () {
         try {
-            Process pro = Runtime.getRuntime().exec("java -jar C://Users/machu/Documents/BatchArca/target/bonjour.jar");
+            Runtime.getRuntime().exec(JettyServer.batchExecuteCommand);
         } catch (IOException e) {
+
             return Response.serverError().entity(e.getMessage()).build();
         }
         return Response.ok().build();

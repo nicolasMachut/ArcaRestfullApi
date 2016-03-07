@@ -1,18 +1,12 @@
 package com.arca.app.bo;
 
 import com.arca.app.dao.LineDaoImpl;
-import com.arca.app.domain.ChartLine;
 import com.arca.app.domain.GroupedLine;
-import org.jvnet.hk2.annotations.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by machu on 05/03/2016.
- */
-@Service(name = "lineBoImpl")
 public class LineBoImpl implements LineBo {
 
     private LineDaoImpl lineDao;
@@ -25,7 +19,7 @@ public class LineBoImpl implements LineBo {
         return lineDao.getByCountry();
     }
 
-    public List<ChartLine> getForChart(int year) {
+    public List<GroupedLine> getForChart(int year) {
         return lineDao.getForChart(getFirstDayOfTheYear(year), getLastDayOfTheYear(year));
     }
 

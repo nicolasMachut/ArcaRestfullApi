@@ -1,7 +1,6 @@
 package com.arca.app.dao;
 
-import com.arca.app.MongoDbConnector;
-import com.arca.app.domain.ChartLine;
+import com.arca.app.utils.MongoDbConnector;
 import com.arca.app.domain.GroupedLine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.Block;
@@ -14,17 +13,32 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by machu on 05/03/2016.
- */
 public class LineDaoImpl implements LineDao {
 
-    // Static objects should be avoided but it's fine for the mapper :)
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public List<GroupedLine> getByCountry() {
-        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.INSTANCE.getCollection("arcaFile").aggregate(Arrays.asList(new Document("$group", new Document("_id", "$country").append("sum", new Document("$sum", "$value")))));
-        final ArrayList<GroupedLine> lines = new ArrayList<GroupedLine>();
+        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
+                INSTANCE.
+                getCollection("arcaFile").
+                aggregate(Arrays.asList(new Document("$group", new Document("_id", "$country").
+                        append("sum", new Document("$sum", "$value")))));
+        return toListOfPojo(documentsReturnedByMongo);
+    }
+
+    public List<GroupedLine> getForChart(Date start, Date end) {
+        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
+                INSTANCE
+                .getCollection("arcaFile")
+                .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start).
+                        append("$lte", end))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).
+                        get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
+
+        return toListOfPojo(documentsReturnedByMongo);
+    }
+
+    private ArrayList<GroupedLine> toListOfPojo(AggregateIterable<Document> documentsReturnedByMongo) {
+        final ArrayList<GroupedLine> lines = new ArrayList<>();
         documentsReturnedByMongo.forEach(new Block<Document>() {
             public void apply(Document document) {
 
@@ -36,34 +50,6 @@ public class LineDaoImpl implements LineDao {
                 }
             }
         });
-
-        return lines;
-    }
-
-    public List<ChartLine> getForChart(Date start, Date end) {
-        AggregateIterable<Document> documentsReturnedByMongo =  MongoDbConnector.
-                INSTANCE
-                .getCollection("arcaFile")
-                .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start).append("$lte", end))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
-
-        return addToList(documentsReturnedByMongo);
-    }
-
-    private ArrayList<ChartLine> addToList(AggregateIterable<Document> documentsReturnedByMongo) {
-        final ArrayList<ChartLine> lines = new ArrayList<ChartLine>();
-        documentsReturnedByMongo.forEach(new Block<Document>() {
-            public void apply(Document document) {
-                System.out.println("test");
-                try {
-                    ChartLine line = mapper.readValue(document.toJson(), ChartLine.class);
-                    System.out.println(line.getSum());
-                    lines.add(line);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        System.out.println(lines.size());
         return lines;
     }
 }
