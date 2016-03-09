@@ -28,7 +28,6 @@ public class LineResource {
     @Path("lineByCountry")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDataGroupByCountry() throws JsonProcessingException {
-        System.out.println("test");
         final ObjectMapper mapper = new ObjectMapper();
         List<GroupedLine> res = lineBo.getByCountry();
         String json = mapper.writeValueAsString(res);
