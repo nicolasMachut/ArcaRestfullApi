@@ -17,8 +17,8 @@ public class MongoDbConnector {
     private MongoDbConnector() {
 
         // Creating mongodb uri connection
-        //MongoClientURI uri = new MongoClientURI("mongodb://" + user + ":" + password + "@" + host + ":" + port + "/" + databaseName);
-        MongoClientURI uri = new MongoClientURI("mongodb://" + JettyServer.databaseHost + ":" + JettyServer.databasePort + "/" + JettyServer.databaseName);
+        MongoClientURI uri = new MongoClientURI("mongodb://" + JettyServer.databaseUser + ":" + JettyServer.databasePwd + "@" + JettyServer.databaseHost + ":" + JettyServer.databasePort + "/" + JettyServer.databaseName);
+        //MongoClientURI uri = new MongoClientURI("mongodb://" + JettyServer.databaseHost + ":" + JettyServer.databasePort + "/" + JettyServer.databaseName);
 
         // Creating mongodb connection
         MongoClient mongoClient = new MongoClient(uri);
