@@ -40,7 +40,7 @@ public class LineDaoImpl implements LineDao {
                 .getCollection("arcaFile")
                 .aggregate(Arrays.asList(new Document("$match", new Document("timestamp", new Document("$gte", start).
                         append("$lte", end))),new Document("$group", new Document("_id", new Document("day", new Document("$dayOfYear", "$timestamp")).
-                        get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("day", 1))));
+                        get("day")).append("sum", new Document("$sum", "$value"))), new Document("$sort", new Document("_id", 1))));
     }
 
     private ArrayList<GroupedLine> toListOfPojo(MongoIterable<Document> documentsReturnedByMongo) {
